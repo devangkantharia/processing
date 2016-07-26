@@ -13,23 +13,40 @@ import java.io.OutputStream;
 import java.io.IOException; 
 
 public class sketch01 extends PApplet {
+  public void setup() {
+// water test with vertex colouring
 
-// \u30d7\u30ed\u30b0\u30e9\u30e0\u958b\u59cb\u6642\u306b\u4e00\u5ea6\u3060\u3051\u5b9f\u884c\u3055\u308c\u308b\u51e6\u7406
-public void setup() {
-    // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u8a2d\u5b9a
-  background(255); // \u80cc\u666f\u8272\u3092\u8a2d\u5b9a
-}
 
-// setup\u5b9f\u884c\u5f8c\u306b\u7e70\u308a\u8fd4\u3057\u5b9f\u884c\u3055\u308c\u308b\u51e6\u7406
-public void draw() {
-  // \u56f3\u5f62\u306e\u8f2a\u90ed\u7dda\u3092\u6d88\u3059
-  noStroke();
-  // \u30e9\u30f3\u30c0\u30e0\u306a\u8272\u3092\u6307\u5b9a
-  fill(random(255), random(255), random(255), random(255));
-  // \u30de\u30a6\u30b9\u306e\u4f4d\u7f6e\u306b\u30e9\u30f3\u30c0\u30e0\u306a\u5927\u304d\u3055\u306e\u6955\u5186\u3092\u63cf\u304f
-  ellipse(mouseX, mouseY, random(50), random(50));
+float yoff = 0, zoff = 0, ns = 0.1f, zs = 8;
+float nx, ny = yoff, z1, z2;
+noiseDetail(8, 0.5f);
+noStroke();
+
+background(20, 40, 50);
+translate(width * 0.5f, height * .55f, 0);
+rotate(PI / 3.25f);
+scale(15);
+
+for(int y = -10; y <= 10; y++){
+  nx = 0.005f;
+  beginShape(TRIANGLE_STRIP);
+  for(int x = -25; x < 25; x++){
+    z1 = noise(nx, ny, zoff);
+    z2 = noise(nx, ny + ns, zoff);
+    fill(0, z1 * 160, z1 * 255, pow(10, 0.85f + z1 * 2));
+    vertex(x, y, z1*zs);
+    fill(0, z2 * 160, z2 * 255, pow(10, 0.85f + z2 * 2));
+    vertex(x, y+1, z2 * zs);
+    nx += ns;
+  }
+  endShape();
+  ny+=ns;
 }
-  public void settings() {  size(750, 350); }
+    noLoop();
+  }
+
+  public void settings() { 
+size(512, 512, P3D); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch01" };
     if (passedArgs != null) {
